@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Arvo&family=Josefin+Sans:wght@100;400&display=swap");
+body {
+  margin: 0;
+  background-color: #DDFFFF !important;
+  font-family: "Arvo" !important;
+  font-weight: 700 !important;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+nav  a {
+    color: #555 !important;
+}

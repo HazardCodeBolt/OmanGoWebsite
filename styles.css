@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Arvo&family=Josefin+Sans:wght@100;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo&family=Josefin+Sans:wght@100;400&display=swap');
 body {
   margin: 0;
-  background-color: #DDFFFF !important;
   font-family: "Arvo" !important;
   font-weight: 700 !important;
 }
@@ -12,6 +11,36 @@ header {
   padding: 20px;
 }
 
-nav  a {
-    color: #555 !important;
+nav a {
+  color: #555 !important;
+}
+
+#main-container {
+  background-color: #DFF !important;
+  display: grid;
+}
+
+#search-button:hover {
+  color: white;
+  background-color: #0dcaf0 !important;
+}
+#cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 30% !important;
+}
+
+#nav-route:hover {
+  color: #0dcaf0 !important;
+}
+
+.title-font {
+  font-size: 80px;
+  font-family: 'Alfa Slab One';
+  color: #333;
+
 }

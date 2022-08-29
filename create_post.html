@@ -12,7 +12,17 @@
       integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
       crossorigin="anonymous"
     />
+    <script
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key="
+    ></script>
+    <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
     <script src="main.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="node_modules/easymde/dist/easymde.min.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body border-dark p-3">
@@ -35,112 +45,160 @@
             width="50"
             height="50"
           />
-          OmanGo
-        </a>
+          OmanGo</a
+        >
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a
+                class="nav-link active"
+                id="nav-route"
+                aria-current="page"
+                href="#"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">About</a>
+              <a
+                class="nav-link active"
+                id="nav-route"
+                aria-current="page"
+                href="#"
+                >Create</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#"
-                >Register</a
+              <a
+                class="nav-link active"
+                id="nav-route"
+                aria-current="page"
+                href="#"
+                >About</a
               >
             </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-info bg-body" type="submit">
-              Search
-            </button>
-          </form>
+          <button class="btn btn-dark">
+            <a
+              aria-current="page"
+              href="#"
+              style="text-decoration: none; color: white !important"
+              >Register</a
+            >
+          </button>
         </div>
       </div>
     </nav>
     <main class="p-3">
-      <div
-        class="container rounded-4 p-4 w-75 h-100 bg-body"
-        id="main-container"
-      >
-        <h1 class="title text-center">Toutist Sites Posts</h1>
-        <div class="row">
-          <div class="card m-2 col-12 col-md-6 col-lg-4" style="width: 18rem">
-            <img
-              src="https://pbs.twimg.com/media/EVgVuB4XgAEiZ8G?format=jpg&name=large"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="btn btn-info text-light">Edit Post</a>
+      <div class="container rounded-4 p-4 w-75 bg-body">
+        <!-- top of main container -->
+        <h1 class="title text-center text title-font">Create Blog Posts</h1>
+        <p class="text-center fw-light lh-lg">
+          Here you can create a new blog post to publish it,
+          <br />
+          this page is provided with the tools you need.
+        </p>
+        <!-- form container -->
+        <div class="container m-3 p-3 border rounded-3 bg-light">
+          <form action="" method="get">
+            <div class="input-group mb-3">
+              <span class="input-group-text text-bg-light"
+                >Location Name :</span
+              >
+              <input type="text" name="locationName" class="form-control" />
             </div>
-          </div>
-
-          <div class="card m-2 col-12 col-md-6 col-lg-4" style="width: 18rem">
-            <img
-              src="https://pbs.twimg.com/media/Ez5dsbGX0AEGcFI?format=jpg&name=360x360"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="btn btn-info text-light">Edit Post</a>
+            <div class="input-group mb-3">
+              <span class="input-group-text text-bg-light">Video Url :</span>
+              <input type="text" name="videoUrl" class="form-control" />
             </div>
-          </div>
-          <div class="card m-2 col-12 col-md-6 col-lg-4" style="width: 18rem">
-            <img
-              src="https://pbs.twimg.com/media/EjV9MpUXsAEOcOs?format=jpg&name=large"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="btn btn-info text-light">Edit Post</a>
+            <div class="input-group mb-3">
+              <button class="btn btn-outline-secondary" type="button">
+                Add Category
+              </button>
+              <select
+                class="form-select"
+                id="inputGroupSelect03"
+                aria-label="Example select with button addon"
+              >
+                <option selected>Choose...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
             </div>
-          </div>
-
-          <div class="card m-2 col-12 col-md-6 col-lg-4" style="width: 18rem">
-            <img
-              src="https://pbs.twimg.com/media/Ei0rVcBWsAE2rXP?format=jpg&name=360x360"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <a href="#" class="btn btn-info text-light">Edit Post</a>
+            <div class="container mb-3" id="categories-holder">
+              <span
+                class="badge text-bg-light border border-secondary p-2 me-1 mb-2 category-badge"
+                >success</span
+              >
+              <span
+                class="badge text-bg-light border border-secondary p-2 me-1 mb-2 category-badge"
+                >abort</span
+              >
+              <span
+                class="badge text-bg-light border border-secondary p-2 me-1 mb-2 category-badge"
+                >good</span
+              >
             </div>
-          </div>
+            <!-- map -->
+            <div
+              id="map"
+              class="rounded-2 border border-secondary"
+              style="width: 100%; height: 500px"
+            ></div>
+            <br />
+            <button type="button" class="active btn mb-3 " id="confirmPosition">Confirm Position</button>
+            <br />
+            <p>On idle position: <span id="onIdlePositionView"></span></p>
+            <p>On click position: <span id="onClickPositionView"></span></p>
+            <!-- map end -->
+            <textarea name="md-text" id="my-text-area"></textarea>
+          </form>
         </div>
+        <!-- form contianer end -->
       </div>
     </main>
+
+    <script src="node_modules/easymde/dist/easymde.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
       crossorigin="anonymous"
     ></script>
+    <script>
+      const easyMDE = new EasyMDE({
+        element: document.getElementById("my-text-area"),
+      });
+      // Get element references
+      var confirmBtn = document.getElementById("confirmPosition");
+      var onClickPositionView = document.getElementById("onClickPositionView");
+      var onIdlePositionView = document.getElementById("onIdlePositionView");
+
+      // Initialize locationPicker plugin
+      var lp = new locationPicker(
+        "map",
+        {
+          setCurrentPosition: true, // You can omit this, defaults to true
+        },
+        {
+          zoom: 15, // You can set any google map options here, zoom defaults to 15
+        }
+      );
+
+      // Listen to button onclick event
+      confirmBtn.onclick = function () {
+        // Get current location and show it in HTML
+        var location = lp.getMarkerPosition();
+        onClickPositionView.innerHTML =
+          "The chosen location is " + location.lat + "," + location.lng;
+      };
+
+      // Listen to map idle event, listening to idle event more accurate than listening to ondrag event
+      // google.maps.event.addListener(lp.map, "idle", function (event) {
+      //   // Get current location and show it in HTML
+      //   var location = lp.getMarkerPosition();
+      //   onIdlePositionView.innerHTML =
+      //     "The chosen location is " + location.lat + "," + location.lng;
+      // });
+    </script>
   </body>
 </html>

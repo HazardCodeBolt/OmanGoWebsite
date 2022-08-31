@@ -77,3 +77,33 @@ nav a {
   color: white;
   border-color: transparent;
 }
+
+#addCategory:hover {
+  background-color: lightgreen;
+  color: white;
+  border-color: transparent;
+}
+
+#addImage:hover {
+  background-color: lightgreen;
+  color: white;
+  border-color: transparent;
+}
+
+.carousel-item>img {
+ object-fit: cover; 
+}
+
+.addedImage {
+  display: block !important;
+  margin-left: auto !important; 
+  margin-right: auto !important;
+  border-radius: 20px !important;
+  width: 50% !important;
+  height: 50% !important; 
+}
+
+.removeImageBtn {
+  margin-left: auto !important; 
+  margin-right: auto !important;
+}

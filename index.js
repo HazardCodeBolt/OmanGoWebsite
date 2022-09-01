@@ -49,14 +49,14 @@ var categories = [
   "Opera House",
   "Palace",
   "Museum",
-  "Amusement center",
+  "Amusement center" 
 ];
 
 var categoryDropDown = document.getElementById("inputGroupSelect03");
 var categoriesHolder = document.getElementById("categories-holder");
 var addCategoryButton = document.getElementById("addCategory");
 
-for (let index = 1; index <= categories.length; index++) {
+for (let index = 0; index < categories.length; index++) {
   const category = categories[index];
   let option = document.createElement("option");
   option.value = index;
@@ -75,9 +75,7 @@ addCategoryButton.addEventListener("click", function () {
     let categorySpan = document.createElement("span");
     categorySpan.classList.add(
       "badge",
-      "text-bg-light",
       "border",
-      "border-secondary",
       "p-2",
       "me-1",
       "category-badge"
@@ -98,16 +96,16 @@ function isImage(url) {
   return /(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
 }
 
+// https://pbs.twimg.com/media/EZvjK-XXkAA0v4X?format=jpg&name=large
 var innerAccordion = document.getElementById("innerAccordion");
 var imageUrlField = document.getElementById("imageUrlField");
 var addImageButton = document.getElementById("addImage");
-
+var index = 1;
 addImageButton.addEventListener("click", function () {
   let url = imageUrlField.value;
   if (url !== "" && isImage(url)) {
     let item = document.createElement("div");
-    let index = innerAccordion.childElementCount + 3;
-    console.log(index);
+    console.log(innerAccordion.children);
     item.classList.add("accordion-item");
     item.innerHTML = `
     <h2 class="accordion-header" id="heading${index}">
@@ -118,12 +116,13 @@ addImageButton.addEventListener("click", function () {
     <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#innerAccordion">
     <div class="accordion-body"> 
     <img src="${url}" alt="" class="addedImage">  
-    <button type="button" onclick="removeItem(this)" class="btn btn-danger d-block mt-3 mb-3" style="margin-left: auto; margin-right: auto;">
+    <button type="button" onclick="removeItem(this)" class="btn d-block mt-3 mb-3 removeImageBtn" style="margin-left: auto; margin-right: auto;">
     remove
     </button>  
     </div>
     </div>`;
     innerAccordion.appendChild(item);
+    index++;
   }
 });
 

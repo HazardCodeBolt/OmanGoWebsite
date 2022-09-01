@@ -70,15 +70,9 @@
               </button>
               <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
                 <option selected>Choose...</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
               </select>
             </div>
             <div class="container mb-3" id="categories-holder">
-              <span class="badge text-bg-light border border-secondary p-2 me-1 category-badge">success</span>
-              <span class="badge text-bg-light border border-secondary p-2 me-1 category-badge">abort</span>
-              <span class="badge text-bg-light border border-secondary p-2 me-1 category-badge">good</span>
             </div>
             <div class="accordion mb-3 " id="accordionExample">
               <div class="accordion-item">
@@ -230,28 +224,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
       crossorigin="anonymous"></script>
-    <script>
-      const easyMDE = new EasyMDE({
-        element: document.getElementById("my-text-area"),
-      });
-
-      var confirmBtn = document.getElementById("confirmPosition");
-      var longitudeField = document.getElementById("longitudeField");
-      var latitudeField = document.getElementById("latitudeField");
-
-      var lp = new locationPicker(
-        "map",
-        { setCurrentPosition: true },
-        { zoom: 15 }
-      );
-
-      confirmBtn.onclick = function () {
-        var location = lp.getMarkerPosition();
-        longitudeField.value = location.lng;
-        latitudeField.value = location.lat;
-      };
-
-    </script>
+    <script src="index.js"></script>
   </body>
 
 </html>

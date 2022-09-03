@@ -123,4 +123,18 @@ e7f1ff
   border-color: #e40c42 !important; 
 }
 
+#map {
+  width: 100%; 
+  height: 500px
+}
 
+#registerBtn {
+  text-decoration: none; 
+  color: white !important;
+}
+
+#submitButton {
+  background-color: #e7fff1 !important;
+  color: #0ce466 !important;
+  border: 1px #0ce466 solid !important;
+}

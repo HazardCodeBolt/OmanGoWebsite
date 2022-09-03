@@ -11,7 +11,7 @@ var longitudeField = document.getElementById("longitudeField");
 var latitudeField = document.getElementById("latitudeField");
 
 var lp = new locationPicker("map", { setCurrentPosition: true }, { zoom: 15 });
-
+ 
 confirmBtn.onclick = function () {
   var location = lp.getMarkerPosition();
   longitudeField.value = location.lng;
@@ -131,3 +131,41 @@ function removeItem(element) {
 }
 // strat of adding accordion image item and deleting it
 // --------------------------------------------------------------------------------
+
+import { initializeApp } from "firebase/app";
+import {getFirestore, collection, getDocs } from "firebase/firestore";
+const firebaseConfig = {
+  apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
+  authDomain: "tourguideom-2861a.firebaseapp.com",
+  projectId: "tourguideom-2861a",
+  storageBucket: "tourguideom-2861a.appspot.com",
+  messagingSenderId: "513935140062",
+  appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
+  measurementId: "G-EVKY5F25VR"
+};
+ 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+var submitButton = document.getElementById('submitButton');
+
+submitButton.addEventListener('click', function() {
+  let locationNameField = document.getElementById('locationName');
+  let videoUrlField = document.getElementById('VideoUrlField');
+  let categoriesList = [];
+  let choosenCategories = document.querySelectorAll('#categories-holder .category-badge');
+  for (const item of choosenCategories) {
+    categoriesList.push(item.innerText);
+  }
+  let locationText =`${latitudeField.value},${longitudeField.value}`;
+  let images = document.querySelectorAll('#innerAccordion img');
+  let imagesUrlsList = [];
+  for (const image of images) {
+    imagesUrlsList.push(image.src);
+  }
+  let overviewField = document.getElementById('overview');
+  let articleText = easyMDE.value(); 
+  // don't forget timestamp
+
+});
+  

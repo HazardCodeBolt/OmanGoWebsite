@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arvo&family=Josefin+Sans:wght@100;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Arvo&display=swap');
 body {
   margin: 0;
   font-family: "Arvo" !important;
@@ -7,7 +7,7 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
   padding: 20px;
 }
 
@@ -138,3 +138,7 @@ e7f1ff
   color: #0ce466 !important;
   border: 1px #0ce466 solid !important;
 }
+
+#categoryErr , #emptyErr, #shortErr, #imagesErr {
+  display: none;
+}  

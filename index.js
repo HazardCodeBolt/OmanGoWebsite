@@ -11,7 +11,7 @@ var longitudeField = document.getElementById("longitudeField");
 var latitudeField = document.getElementById("latitudeField");
 
 var lp = new locationPicker("map", { setCurrentPosition: true }, { zoom: 15 });
- 
+
 confirmBtn.onclick = function () {
   var location = lp.getMarkerPosition();
   longitudeField.value = location.lng;
@@ -49,7 +49,7 @@ var categories = [
   "Opera House",
   "Palace",
   "Museum",
-  "Amusement center" 
+  "Amusement center",
 ];
 
 var categoryDropDown = document.getElementById("inputGroupSelect03");
@@ -105,7 +105,6 @@ addImageButton.addEventListener("click", function () {
   let url = imageUrlField.value;
   if (url !== "" && isImage(url)) {
     let item = document.createElement("div");
-    console.log(innerAccordion.children);
     item.classList.add("accordion-item");
     item.innerHTML = `
     <h2 class="accordion-header" id="heading${index}">
@@ -132,8 +131,19 @@ function removeItem(element) {
 // strat of adding accordion image item and deleting it
 // --------------------------------------------------------------------------------
 
-import { initializeApp } from "firebase/app";
-import {getFirestore, collection, getDocs } from "firebase/firestore";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+import {
+  doc,
+  setDoc,
+  addDoc,
+  getFirestore,
+  collection,
+  getDocs,
+  GeoPoint,
+  serverTimestamp,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
   authDomain: "tourguideom-2861a.firebaseapp.com",
@@ -141,31 +151,89 @@ const firebaseConfig = {
   storageBucket: "tourguideom-2861a.appspot.com",
   messagingSenderId: "513935140062",
   appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
-  measurementId: "G-EVKY5F25VR"
+  measurementId: "G-EVKY5F25VR",
 };
- 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-var submitButton = document.getElementById('submitButton');
+var submitButton = document.getElementById("submitButton");
 
-submitButton.addEventListener('click', function() {
-  let locationNameField = document.getElementById('locationName');
-  let videoUrlField = document.getElementById('VideoUrlField');
+submitButton.addEventListener("click", async function () {
+  // error divs
+  let imagesErrDiv = document.getElementById("imagesErr");
+  let categoryErrDiv = document.getElementById("categoryErr");
+  let shortErrDiv = document.getElementById("shortErr");
+  let emptyErrDiv = document.getElementById("emptyErr");
+
+  imagesErrDiv.style.display = "none";
+  shortErrDiv.style.display = "none";
+  categoryErrDiv.style.display = "none";
+  emptyErrDiv.style.display = "none";
+  // --------------------------------------------------
+
+  let locationNameField = document.getElementById("locationName");
+  let locationName = locationNameField.value;
+  let videoUrlField = document.getElementById("videoUrlField");
+  let videoUrl = videoUrlField.value;
   let categoriesList = [];
-  let choosenCategories = document.querySelectorAll('#categories-holder .category-badge');
+  let choosenCategories = document.querySelectorAll(
+    "#categories-holder .category-badge"
+  );
   for (const item of choosenCategories) {
     categoriesList.push(item.innerText);
   }
-  let locationText =`${latitudeField.value},${longitudeField.value}`;
-  let images = document.querySelectorAll('#innerAccordion img');
+  let images = document.querySelectorAll("#innerAccordion img");
   let imagesUrlsList = [];
   for (const image of images) {
     imagesUrlsList.push(image.src);
   }
-  let overviewField = document.getElementById('overview');
-  let articleText = easyMDE.value(); 
-  // don't forget timestamp
-
-});
+  let overviewField = document.getElementById("overview");
+  let overviewText = overviewField.value;
+  let articleText = easyMDE.value();
+  let latitude = latitudeField.value;
+  let longitude = longitudeField.value;
+  let location = new GeoPoint((latitude = latitude), (longitude = longitude));
   
+  let checkList = [
+    longitude,
+    latitude,
+    overviewText,
+    locationName,
+    videoUrl,
+  ]; 
+
+  if (checkList.some((item) => item === "")) {
+    emptyErrDiv.style.display = "block";
+  }
+  if (articleText.length < 300) {
+    shortErrDiv.style.display = "block";
+  }
+  if (imagesUrlsList.length < 3) {
+    imagesErrDiv.style.display = "block";
+  }
+  if (categoriesList.length === 0) {
+    categoryErrDiv.style.display = "block";
+  }
+
+  let articleData = {
+    articleTextMD: articleText,
+    categories: categoriesList,
+    images: imagesUrlsList,
+    likesNO: 0,
+    location: location,
+    locationName: locationNameField.value,
+    videoUrl: videoUrlField.value,
+    rating: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
+    writingDate: serverTimestamp(), 
+    overview: overviewField.value,
+  };
+
+  await addDoc(collection(db, "articles_data"), articleData);
+});

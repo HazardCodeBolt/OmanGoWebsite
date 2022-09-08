@@ -81,12 +81,12 @@ addCategoryButton.addEventListener("click", function () {
       "category-badge"
     );
     categorySpan.innerText = selectedValue;
-    categorySpan.onclick = () => remove(categorySpan);
+    categorySpan.onclick = () => removeBadge(categorySpan);
     categoriesHolder.appendChild(categorySpan);
   }
 });
 
-function remove(element) {
+function removeBadge(element) {
   categoriesHolder.removeChild(element);
 }
 // end of adding categories to dropdown and to categories holder
@@ -115,7 +115,7 @@ addImageButton.addEventListener("click", function () {
     <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#innerAccordion">
     <div class="accordion-body"> 
     <img src="${url}" alt="" class="addedImage">  
-    <button type="button" onclick="removeItem(this)" class="btn d-block mt-3 mb-3 removeImageBtn" style="margin-left: auto; margin-right: auto;">
+    <button type="button" onclick="removeImage(this)" class="btn d-block mt-3 mb-3 removeImageBtn" style="margin-left: auto; margin-right: auto;">
     remove
     </button>  
     </div>
@@ -125,11 +125,54 @@ addImageButton.addEventListener("click", function () {
   }
 });
 
-function removeItem(element) {
-  element.parentElement.parentElement.parentElement.remove();
-}
+// function removeImage(element) {
+//   element.parentElement.parentElement.parentElement.remove();
+// }
+
 // strat of adding accordion image item and deleting it
 // --------------------------------------------------------------------------------
+/* <div class="container d-flex flex-row rounded-2 p-2">
+    <a href="" class="flex-grow-1">https://pbs.twimg.com/media/EZvjK-XXkAA0v4X?format=jpg&name=large</a>
+    <button class="btn mb-2 remove-src bi-x"></button>
+</div> */
+let addResourceButton = document.getElementById("addResource");
+
+addResourceButton.addEventListener("click", function () {
+  let resourceField = document.getElementById("resourceField");
+  let resourcesDiv = document.getElementById("resources-div");
+  let resourceUrl = resourceField.value;
+  let linkItem = document.createElement("div");
+  linkItem.classList.add("d-flex", "flex-row", "rounded-2", "p-2");
+  linkItem.innerHTML = `
+  <a href="${resourceUrl}" class="flex-grow-1">${resourceUrl}</a>
+  <button type="button" class="btn mb-2 remove-src bi-x" onclick="removeResource(this)"></button>
+  `;
+
+  if (resourceUrl !== "" && isURL(resourceUrl)) {
+    resourcesDiv.appendChild(linkItem);
+  }
+});
+
+function isURL(str) {
+  var pattern = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
+  ); // fragment locator
+  return !!pattern.test(str);
+}
+
+// function removeResource(element) {
+//   element.parentElement.remove();
+// }
+
+// end of adding resources
+// --------------------------------------------------------------------------------
+// strat of adding accordion image item and deleting it
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
 import {
@@ -141,7 +184,7 @@ import {
   getDocs,
   GeoPoint,
   serverTimestamp,
-  Timestamp
+  Timestamp,
 } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -165,17 +208,20 @@ submitButton.addEventListener("click", async function () {
   let categoryErrDiv = document.getElementById("categoryErr");
   let shortErrDiv = document.getElementById("shortErr");
   let emptyErrDiv = document.getElementById("emptyErr");
+  let resourcesErrDiv = document.getElementById("resourcesErr");
 
   imagesErrDiv.style.display = "none";
   shortErrDiv.style.display = "none";
   categoryErrDiv.style.display = "none";
   emptyErrDiv.style.display = "none";
+  resourcesErrDiv.style.display = "none";
   // --------------------------------------------------
 
   let locationNameField = document.getElementById("locationName");
   let locationName = locationNameField.value;
   let videoUrlField = document.getElementById("videoUrlField");
   let videoUrl = videoUrlField.value;
+
   let categoriesList = [];
   let choosenCategories = document.querySelectorAll(
     "#categories-holder .category-badge"
@@ -183,25 +229,27 @@ submitButton.addEventListener("click", async function () {
   for (const item of choosenCategories) {
     categoriesList.push(item.innerText);
   }
+
   let images = document.querySelectorAll("#innerAccordion img");
   let imagesUrlsList = [];
   for (const image of images) {
     imagesUrlsList.push(image.src);
   }
+
+  let resources = document.querySelectorAll("#resources-div a");
+  let resourcesList = [];
+  for (const resource of resources) {
+    resourcesList.push(resource.innerText);
+  }
+
   let overviewField = document.getElementById("overview");
   let overviewText = overviewField.value;
   let articleText = easyMDE.value();
   let latitude = latitudeField.value;
   let longitude = longitudeField.value;
   let location = new GeoPoint((latitude = latitude), (longitude = longitude));
-  
-  let checkList = [
-    longitude,
-    latitude,
-    overviewText,
-    locationName,
-    videoUrl,
-  ]; 
+
+  let checkList = [longitude, latitude, overviewText, locationName, videoUrl];
 
   if (checkList.some((item) => item === "")) {
     emptyErrDiv.style.display = "block";
@@ -215,25 +263,39 @@ submitButton.addEventListener("click", async function () {
   if (categoriesList.length === 0) {
     categoryErrDiv.style.display = "block";
   }
+  if (resourcesList.length === 0) {
+    resourcesErrDiv.style.display = "block";
+  }
 
-  let articleData = {
-    articleTextMD: articleText,
-    categories: categoriesList,
-    images: imagesUrlsList,
-    likesNO: 0,
-    location: location,
-    locationName: locationNameField.value,
-    videoUrl: videoUrlField.value,
-    rating: {
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-    },
-    writingDate: serverTimestamp(), 
-    overview: overviewField.value,
-  };
+  let errorCheckList = [
+    imagesErrDiv.style.display,
+    shortErrDiv.style.display,
+    categoryErrDiv.style.display,
+    emptyErrDiv.style.display,
+    resourcesErrDiv.style.display,
+  ];
 
-  await addDoc(collection(db, "articles_data"), articleData);
+  if (errorCheckList.every((style)=> style !== "block")) {
+    let articleData = {
+      articleTextMD: articleText,
+      categories: categoriesList,
+      images: imagesUrlsList,
+      likesNO: 0,
+      location: location,
+      resources: resourcesList,
+      locationName: locationNameField.value,
+      videoUrl: videoUrlField.value,
+      rating: {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      },
+      writingDate: serverTimestamp(),
+      overview: overviewField.value,
+    };
+
+    await addDoc(collection(db, "articles_data"), articleData);
+  }
 });

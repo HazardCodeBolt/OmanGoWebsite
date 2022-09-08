@@ -78,11 +78,12 @@ nav a {
   border-color: #e40c42 !important; 
 }
 
-/* 
-e7f1ff 
-0c63e4
-*/
-
+.remove-src {
+  cursor: pointer !important;
+  background-color: #ffe7ec !important;
+  color: #e40c42 !important;
+  border-color: #e40c42 !important; 
+}
 
 #confirmPosition:hover {
   background-color: #e7fff1;
@@ -97,6 +98,12 @@ e7f1ff
 }
 
 #addImage:hover {
+  background-color: #e7fff1;
+  color: #0ce466;
+  border-color: #0ce466; 
+}
+
+#addResource:hover {
   background-color: #e7fff1;
   color: #0ce466;
   border-color: #0ce466; 
@@ -139,6 +146,6 @@ e7f1ff
   border: 1px #0ce466 solid !important;
 }
 
-#categoryErr , #emptyErr, #shortErr, #imagesErr {
+#categoryErr , #emptyErr, #shortErr, #imagesErr , #resourcesErr{
   display: none;
 }  

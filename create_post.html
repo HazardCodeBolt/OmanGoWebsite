@@ -140,6 +140,26 @@
                   </div>
                 </div>
               </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Resources
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <!-- body 2 -->
+                    <div class="input-group mb-3">
+                      <button type="button" class="btn btn-outline-secondary" id="addResource">Add Resource</button>
+                      <input type="url" id="resourceField" aria-label="resource url" class="form-control"></input>
+                    </div>
+                    <div class="container" id="resources-div">
+                    </div> 
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="alert alert-danger" id="categoryErr">
               There Should be atleast one category
@@ -153,6 +173,9 @@
             <div class="alert alert-danger" id="imagesErr">
               Include atleast three images
             </div>
+            <div class="alert alert-danger" id="resourcesErr">
+              Include atleast one resource
+            </div>
             <button type="button" class="btn btn-info" id="submitButton">
               Submit
             </button>
@@ -161,11 +184,19 @@
         <!-- form contianer end -->
       </div>
     </main> 
-    <script src="node_modules/easymde/dist/easymde.min.js"></script>
+    <script type="text/javascript" src="node_modules/easymde/dist/easymde.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-      crossorigin="anonymous"></script>
-    <script type="module" src="index.js"></script>
+      crossorigin="anonymous"></script> 
+    <script type="module" src="create_post.js"> </script>
+    <script type="text/javascript"> 
+        function removeResource(element) {
+          element.parentElement.remove();
+        }
+        function removeImage(element) {
+          element.parentElement.parentElement.parentElement.remove();
+        }
+    </script>
   </body>
 
-</html>
+</html> 

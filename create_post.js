@@ -93,7 +93,7 @@ function removeBadge(element) {
 // --------------------------------------------------------------------------------
 // strat of adding accordion image item and deleting it
 function isImage(url) {
-  return /(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
+  return /(jpg|jpeg|png|webp|avif|gif|svg|JPG|JPEG|PNG|WEBP|AVIF|GIF|SVG)/.test(url);
 }
 
 // https://pbs.twimg.com/media/EZvjK-XXkAA0v4X?format=jpg&name=large
@@ -129,12 +129,9 @@ addImageButton.addEventListener("click", function () {
 //   element.parentElement.parentElement.parentElement.remove();
 // }
 
-// strat of adding accordion image item and deleting it
+// end of adding accordion image item and deleting it
 // --------------------------------------------------------------------------------
-/* <div class="container d-flex flex-row rounded-2 p-2">
-    <a href="" class="flex-grow-1">https://pbs.twimg.com/media/EZvjK-XXkAA0v4X?format=jpg&name=large</a>
-    <button class="btn mb-2 remove-src bi-x"></button>
-</div> */
+// start of adding resources and removing them
 let addResourceButton = document.getElementById("addResource");
 
 addResourceButton.addEventListener("click", function () {
@@ -172,8 +169,7 @@ function isURL(str) {
 
 // end of adding resources
 // --------------------------------------------------------------------------------
-// strat of adding accordion image item and deleting it
-
+// strat of sending data to firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
 import {
   doc,
@@ -209,48 +205,48 @@ submitButton.addEventListener("click", async function () {
   let shortErrDiv = document.getElementById("shortErr");
   let emptyErrDiv = document.getElementById("emptyErr");
   let resourcesErrDiv = document.getElementById("resourcesErr");
-
+  
   imagesErrDiv.style.display = "none";
   shortErrDiv.style.display = "none";
   categoryErrDiv.style.display = "none";
   emptyErrDiv.style.display = "none";
   resourcesErrDiv.style.display = "none";
   // --------------------------------------------------
-
+  
   let locationNameField = document.getElementById("locationName");
   let locationName = locationNameField.value;
   let videoUrlField = document.getElementById("videoUrlField");
   let videoUrl = videoUrlField.value;
-
+  
   let categoriesList = [];
   let choosenCategories = document.querySelectorAll(
     "#categories-holder .category-badge"
-  );
-  for (const item of choosenCategories) {
-    categoriesList.push(item.innerText);
-  }
-
-  let images = document.querySelectorAll("#innerAccordion img");
-  let imagesUrlsList = [];
-  for (const image of images) {
-    imagesUrlsList.push(image.src);
-  }
-
-  let resources = document.querySelectorAll("#resources-div a");
-  let resourcesList = [];
-  for (const resource of resources) {
-    resourcesList.push(resource.innerText);
-  }
-
+    );
+    for (const item of choosenCategories) {
+      categoriesList.push(item.innerText);
+    }
+    
+    let images = document.querySelectorAll("#innerAccordion img");
+    let imagesUrlsList = [];
+    for (const image of images) {
+      imagesUrlsList.push(image.src);
+    }
+    
+    let resources = document.querySelectorAll("#resources-div a");
+    let resourcesList = [];
+    for (const resource of resources) {
+      resourcesList.push(resource.innerText);
+    }
+    
   let overviewField = document.getElementById("overview");
   let overviewText = overviewField.value;
   let articleText = easyMDE.value();
   let latitude = latitudeField.value;
   let longitude = longitudeField.value;
   let location = new GeoPoint((latitude = latitude), (longitude = longitude));
-
+  
   let checkList = [longitude, latitude, overviewText, locationName, videoUrl];
-
+  
   if (checkList.some((item) => item === "")) {
     emptyErrDiv.style.display = "block";
   }
@@ -266,7 +262,7 @@ submitButton.addEventListener("click", async function () {
   if (resourcesList.length === 0) {
     resourcesErrDiv.style.display = "block";
   }
-
+  
   let errorCheckList = [
     imagesErrDiv.style.display,
     shortErrDiv.style.display,
@@ -274,7 +270,7 @@ submitButton.addEventListener("click", async function () {
     emptyErrDiv.style.display,
     resourcesErrDiv.style.display,
   ];
-
+  
   if (errorCheckList.every((style)=> style !== "block")) {
     let articleData = {
       articleTextMD: articleText,
@@ -295,7 +291,9 @@ submitButton.addEventListener("click", async function () {
       writingDate: serverTimestamp(),
       overview: overviewField.value,
     };
-
+    
     await addDoc(collection(db, "articles_data"), articleData);
+    window.location.reload();
   }
 });
+// strat of sending data to firebase

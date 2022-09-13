@@ -21,6 +21,8 @@ confirmBtn.onclick = function () {
 // --------------------------------------------------------------------------------
 // start of adding categories to dropdown and to categories holder
 var categories = [
+  "Restaurant",
+  "Shop",
   "Beach",
   "Park",
   "City",

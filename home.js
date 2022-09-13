@@ -7,6 +7,7 @@ import {
   limit,
   orderBy,
   getDocs,
+  doc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -33,61 +34,42 @@ querySnapshot.forEach((doc) => {
   card.id = doc.id;
   card.innerHTML = `
   <img
-    src="${data["images"][2]}"
+    src="${data.images[0]}" 
     alt="  "
     class="card-img-top"
   />
   <div class="card-body p-4">
       <h5 class="card-title fw-bolder">${data["locationName"]}</h5>
       <p class="card-text fw-lighter">
-      ${data["overview"]}
+      ${data.overview}
       </p>
-      <button class="btn btn-outline">
+      <button type="button" class="delete-post btn btn-outline">
       <i class="bi-trash" style="font-size: 20px"></i>
       </button>
-      <button class="btn btn-outline">
+      <button type="button" class="edit-post btn btn-outline">
       <i class="bi-pencil-fill" style="font-size: 20px"></i>
       </button>
   </div>
   <ul class="list-group list-group-flush">
-      <li class="list-group-item"><i class="bi-geo-alt-fill pe-3"></i> <a src="https://www.google.com/maps/search/${data["location"]._latitude}+${data["location"]._longitude}"> Location </a></li>
+      <li class="list-group-item"><i class="bi-geo-alt-fill pe-3"></i> 
+        <a href="https://www.google.com/maps/search/${data.location.latitude}+${data.location.longitude}"> Location </a>
+      </li>
+      <li class="list-group-item"><i class="bi-play-btn-fill pe-3"></i> <a href="${data.videoUrl}"> Video Url </a> </li>
       <li class="list-group-item"><i class="bi-tags-fill pe-3"></i> Categories</li>
-      <li class="list-group-item"><i class="bi-play-btn-fill pe-3"></i> <a src="${data["videoUrl"]}"> Video Url </a> </li>
   </ul>
   `;
   cardsContainer.appendChild(card);
 });
 
-{
-  /* <div class="container pt-4"  id="cards-container">
-<div class="card m-2 col-12 col-md-12 col-lg-12 ">
-<img
-    src="https://pbs.twimg.com/media/EVgVuB4XgAEiZ8G?format=jpg&name=large"
-    alt="  "
-    class="card-img-top"
-/>
-<div class="card-body p-4">
-    <h5 class="card-title fw-bolder">Dhofar</h5>
-    <p class="card-text fw-lighter">
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui
-    nulla blanditiis quo, error aperiam iure soluta perferendis
-    doloremque itaque exercitationem hic distinctio ea, iste
-    obcaecati vel, in vitae illo? Corrupti!
-    </p>
-    <button class="btn btn-outline">
-    <i class="bi-trash" style="font-size: 20px"></i>
-    </button>
-    <button class="btn btn-outline">
-    <i class="bi-pencil-fill" style="font-size: 20px"></i>
-    </button>
-</div>
-<ul class="list-group list-group-flush">
-    <li class="list-group-item"><i class="bi-geo-alt-fill pe-3"></i> Location</li>
-    <li class="list-group-item"><i class="bi-tags-fill pe-3"></i> Categories</li>
-    <li class="list-group-item"><i class="bi-play-btn-fill pe-3"></i> Video Url</li>
-</ul>
-</div> */
-}
+let deletePostButtons = document.querySelectorAll(".delete-post");
+
+deletePost.forEach(async element => {
+  let elementCard = element.parentElement.parentElement;
+  element.onclick = elementCard.delete();
+  // delete post from firebase
+
+  await deleteDoc(doc(db, elementCard.id));
+});
 // read the available data
 // create basic form with the available data included
 // add the functionalities that are existing in the create post page

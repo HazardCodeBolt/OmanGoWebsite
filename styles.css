@@ -155,3 +155,8 @@ nav a {
 #categoryErr , #emptyErr, #shortErr, #imagesErr , #resourcesErr{
   display: none;
 }  
+
+.card a {
+  text-decoration: none;
+  color: #0ce466;  
+}

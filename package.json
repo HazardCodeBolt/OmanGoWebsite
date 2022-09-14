@@ -2,6 +2,7 @@
   "dependencies": {
     "easymde": "^2.17.0",
     "firebase": "^9.9.4",
-    "location-picker": "^1.1.1"
+    "location-picker": "^1.1.1",
+    "sweetalert": "^2.1.2"
   }
 }

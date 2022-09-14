@@ -7,7 +7,8 @@ import {
   limit,
   orderBy,
   getDocs,
-  doc, deleteDoc
+  doc,
+  deleteDoc,
 } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,9 +22,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); 
+const db = getFirestore(app);
 const q = query(collection(db, "articles_data"), orderBy("writingDate"));
-const querySnapshot = await getDocs(q); 
+const querySnapshot = await getDocs(q);
 
 let cardsContainer = document.getElementById("cards-container");
 querySnapshot.forEach((doc) => {
@@ -60,15 +61,29 @@ querySnapshot.forEach((doc) => {
   `;
   cardsContainer.appendChild(card);
 });
+ 
 
+// deleting documet functionality
 let deletePostButtons = document.querySelectorAll(".delete-post");
-
-deletePost.forEach(async element => {
+ 
+deletePostButtons.forEach((element) => {
   let elementCard = element.parentElement.parentElement;
-  element.onclick = elementCard.delete();
-  // delete post from firebase
-
-  await deleteDoc(doc(db, elementCard.id));
+  element.onclick = () => {
+    swal({
+      title: "Are you sure you want to delete?",
+      text: "Once deleted, you will not be able to recover this article!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => { 
+      if(willDelete) {
+        let docID = elementCard.id;
+        console.log(docID);
+        elementCard.remove();
+        await deleteDoc(doc(db, 'articles_data', docID));
+      }
+    });
+  };
 });
 // read the available data
 // create basic form with the available data included

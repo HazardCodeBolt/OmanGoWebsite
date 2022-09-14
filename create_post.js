@@ -21,6 +21,7 @@ confirmBtn.onclick = function () {
 // --------------------------------------------------------------------------------
 // start of adding categories to dropdown and to categories holder
 var categories = [
+  "Heritage Site",
   "Restaurant",
   "Shop",
   "Beach",
@@ -295,6 +296,7 @@ submitButton.addEventListener("click", async function () {
     };
     
     await addDoc(collection(db, "articles_data"), articleData);
+    document.getElementsByTagName('form')[0].reset();
     window.location.reload();
   }
 });

@@ -11,8 +11,7 @@ app.get("/",(req, res) => {
     res.sendFile(path.join(__dirname, "home.html"));
 });
  
-app.get("/edit/:docID",(req, res) => {
-    console.log(req.params);  
+app.get("/edit",(req, res) => {
     res.sendFile(path.join(__dirname, "edit_post.html"));
 });
 

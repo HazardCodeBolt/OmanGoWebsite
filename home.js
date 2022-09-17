@@ -85,6 +85,12 @@ deletePostButtons.forEach((element) => {
     });
   };
 });
-// read the available data
-// create basic form with the available data included
-// add the functionalities that are existing in the create post page
+
+let editPostButtons = document.querySelectorAll(".edit-post");
+
+editPostButtons.forEach((element)=> {
+  let elementCard = element.parentElement.parentElement;
+  element.onclick = () => {
+    window.location.href = `edit/?docID=${elementCard.id}`;
+  }
+});

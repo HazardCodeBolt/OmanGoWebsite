@@ -160,3 +160,10 @@ nav a {
   text-decoration: none;
   color: #0ce466;  
 }
+
+#resources-div a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75%;
+}

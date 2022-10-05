@@ -1,4 +1,6 @@
 {
+  "name": "omango-data-entry",
+  "main": "main.js",
   "dependencies": {
     "easymde": "^2.17.0",
     "express": "^4.18.1",
@@ -8,5 +10,11 @@
     "nodemon": "^2.0.19",
     "pug": "^3.0.2",
     "sweetalert": "^2.1.2"
+  },
+  "devDependencies": {
+    "electron": "^21.0.1"
+  },
+  "scripts": {
+    "start": "electron ." 
   }
 }

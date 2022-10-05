@@ -24,16 +24,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const q = query(collection(db, "articles_data"), orderBy("writingDate"));
-const querySnapshot = await getDocs(q);
+(async () => {
+  const querySnapshot = await getDocs(q);
 
-let cardsContainer = document.getElementById("cards-container");
-querySnapshot.forEach((doc) => {
-  let data = doc.data();
-  let card = document.createElement("div");
+  let cardsContainer = document.getElementById("cards-container");
+  querySnapshot.forEach((doc) => {
+    let data = doc.data();
+    let card = document.createElement("div");
 
-  card.classList.add("card", "m-2", "col-12", "col-md-12", "col-lg-12");
-  card.id = doc.id;
-  card.innerHTML = `
+    card.classList.add("card", "m-2", "col-12", "col-md-12", "col-lg-12");
+    card.id = doc.id;
+    card.innerHTML = `
   <img
     src="${data.images[0]}" 
     alt="  "
@@ -53,44 +54,44 @@ querySnapshot.forEach((doc) => {
   </div>
   <ul class="list-group list-group-flush">
       <li class="list-group-item"><i class="bi-geo-alt-fill pe-3"></i> 
-        <a href="https://www.google.com/maps/search/${data.location.latitude}+${data.location.longitude}"> Location </a>
+        <a href="https://www.google.com/maps/search/${data.location.latitude}+${data.location.longitude}" rel="noopener noreferrer" target="_blank"> Location </a>
       </li>
-      <li class="list-group-item"><i class="bi-play-btn-fill pe-3"></i> <a href="${data.videoUrl}"> Video Url </a> </li>
+      <li class="list-group-item"><i class="bi-play-btn-fill pe-3"></i> <a href="${data.videoUrl}" rel="noopener noreferrer" target="_blank"> Video Url </a> </li>
       <li class="list-group-item"><i class="bi-tags-fill pe-3"></i> Categories</li>
   </ul>
   `;
-  cardsContainer.appendChild(card);
-});
- 
+    cardsContainer.appendChild(card);
+  });
 
-// deleting documet functionality
-let deletePostButtons = document.querySelectorAll(".delete-post");
- 
-deletePostButtons.forEach((element) => {
-  let elementCard = element.parentElement.parentElement;
-  element.onclick = () => {
-    swal({
-      title: "Are you sure you want to delete?",
-      text: "Once deleted, you will not be able to recover this article!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => { 
-      if(willDelete) {
-        let docID = elementCard.id;
-        console.log(docID);
-        elementCard.remove();
-        await deleteDoc(doc(db, 'articles_data', docID));
-      }
-    });
-  };
-});
+  // deleting documet functionality
+  let deletePostButtons = document.querySelectorAll(".delete-post");
 
-let editPostButtons = document.querySelectorAll(".edit-post");
+  deletePostButtons.forEach((element) => {
+    let elementCard = element.parentElement.parentElement;
+    element.onclick = () => {
+      swal({
+        title: "Are you sure you want to delete?",
+        text: "Once deleted, you will not be able to recover this article!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          let docID = elementCard.id;
+          console.log(docID);
+          elementCard.remove();
+          await deleteDoc(doc(db, "articles_data", docID));
+        }
+      });
+    };
+  });
 
-editPostButtons.forEach((element)=> {
-  let elementCard = element.parentElement.parentElement;
-  element.onclick = () => {
-    window.location.href = `edit/?docID=${elementCard.id}`;
-  }
-});
+  let editPostButtons = document.querySelectorAll(".edit-post");
+
+  editPostButtons.forEach((element) => {
+    let elementCard = element.parentElement.parentElement;
+    element.onclick = () => {
+      window.location.href = `edit/?docID=${elementCard.id}`;
+    };
+  });
+})();

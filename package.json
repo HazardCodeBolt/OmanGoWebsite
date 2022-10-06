@@ -1,6 +1,9 @@
 {
   "name": "omango-data-entry",
   "main": "main.js",
+  "version": "1.0.0",
+  "author": "Saeed Alqassabi",
+  "description": "A Desktop Application for entering data about cities in oman",
   "dependencies": {
     "easymde": "^2.17.0",
     "express": "^4.18.1",
@@ -12,9 +15,24 @@
     "sweetalert": "^2.1.2"
   },
   "devDependencies": {
-    "electron": "^21.0.1"
+    "electron": "^21.0.1",
+    "electron-builder": "^23.3.3"
   },
   "scripts": {
-    "start": "electron ." 
+    "start": "electron .",
+    "dist": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.kawwedha.omangodata",
+    "productName": "Oman Go Data Entry Desktop App",
+    "target": "NSIS",
+    "directories": {
+      "output": "build"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
   }
 }

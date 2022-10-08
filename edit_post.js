@@ -239,12 +239,12 @@ submitButton.addEventListener("click", async function () {
   let longitude = longitudeField.value;
   let location = new GeoPoint((latitude = latitude), (longitude = longitude));
 
-  let checkList = [longitude, latitude, overviewText, locationName, videoUrl];
+  let checkList = [longitude, latitude, overviewText, locationName];
 
   if (checkList.some((item) => item === "")) {
     emptyErrDiv.style.display = "block";
   }
-  if (articleText.length < 300) {
+  if (articleText.length < 100) {
     shortErrDiv.style.display = "block";
   }
   if (imagesUrlsList.length < 3) {
@@ -368,6 +368,7 @@ if (docSnap.exists()) {
 // end of getting data and showing it
 // --------------------------------------------------------------------------------
 // start of adding map and controlling location data fields
+var setBtn = document.getElementById("setPostition");
 var confirmBtn = document.getElementById("confirmPosition");
 let data = docSnap.data();
 var lp = new locationPicker(
@@ -384,5 +385,33 @@ confirmBtn.onclick = function () {
   var location = lp.getMarkerPosition();
   longitudeField.value = location.lng;
   latitudeField.value = location.lat;
+};
+
+function isGeoLocation({ latitude, longitude }) {
+  console.log(`${parseFloat(latitude)} ${parseFloat(longitude)}`);
+  if (
+    parseFloat(latitude) >= -90.0 &&
+    parseFloat(latitude) <= 90.0 &&
+    parseFloat(longitude) >= -180.0 &&
+    parseFloat(longitude) <= 180.0
+  ) { 
+    return true;
+  } else {
+    return false;
+  }
+}
+
+setBtn.onclick = function () {
+  if (isGeoLocation({latitude : latitudeField.value, longitude : longitudeField.value})){
+    lp = new locationPicker(
+      "map",
+      {
+        setCurrentPosition: false,
+        lat: parseFloat(latitudeField.value),
+        lng: parseFloat(longitudeField.value),
+      },
+      { zoom: 15 }
+    );
+  }
 };
 // end of adding map and controlling location data fields

@@ -6,6 +6,7 @@ const easyMDE = new EasyMDE({
 // end of creating the map area
 // --------------------------------------------------------------------------------
 // start of adding map and controlling location data fields
+var setBtn = document.getElementById("setPosition");
 var confirmBtn = document.getElementById("confirmPosition");
 var longitudeField = document.getElementById("longitudeField");
 var latitudeField = document.getElementById("latitudeField");
@@ -16,6 +17,34 @@ confirmBtn.onclick = function () {
   var location = lp.getMarkerPosition();
   longitudeField.value = location.lng;
   latitudeField.value = location.lat;
+};
+
+function isGeoLocation({ latitude, longitude }) {
+  console.log(`${parseFloat(latitude)} ${parseFloat(longitude)}`);
+  if (
+    parseFloat(latitude) >= -90.0 &&
+    parseFloat(latitude) <= 90.0 &&
+    parseFloat(longitude) >= -180.0 &&
+    parseFloat(longitude) <= 180.0
+  ) { 
+    return true;
+  } else {
+    return false;
+  }
+}
+
+setBtn.onclick = function () {
+  if (isGeoLocation({latitude : latitudeField.value, longitude : longitudeField.value})){
+    lp = new locationPicker(
+      "map",
+      {
+        setCurrentPosition: false,
+        lat: parseFloat(latitudeField.value),
+        lng: parseFloat(longitudeField.value),
+      },
+      { zoom: 15 }
+    );
+  }
 };
 // end of adding map and controlling location data fields
 // --------------------------------------------------------------------------------
@@ -96,7 +125,9 @@ function removeBadge(element) {
 // --------------------------------------------------------------------------------
 // strat of adding accordion image item and deleting it
 function isImage(url) {
-  return /(jpg|jpeg|png|webp|avif|gif|svg|JPG|JPEG|PNG|WEBP|AVIF|GIF|SVG)/.test(url);
+  return /(jpg|jpeg|png|webp|avif|gif|svg|JPG|JPEG|PNG|WEBP|AVIF|GIF|SVG)/.test(
+    url
+  );
 }
 
 // https://pbs.twimg.com/media/EZvjK-XXkAA0v4X?format=jpg&name=large
@@ -208,52 +239,52 @@ submitButton.addEventListener("click", async function () {
   let shortErrDiv = document.getElementById("shortErr");
   let emptyErrDiv = document.getElementById("emptyErr");
   let resourcesErrDiv = document.getElementById("resourcesErr");
-  
+
   imagesErrDiv.style.display = "none";
   shortErrDiv.style.display = "none";
   categoryErrDiv.style.display = "none";
   emptyErrDiv.style.display = "none";
   resourcesErrDiv.style.display = "none";
   // --------------------------------------------------
-  
+
   let locationNameField = document.getElementById("locationName");
   let locationName = locationNameField.value;
   let videoUrlField = document.getElementById("videoUrlField");
   let videoUrl = videoUrlField.value;
-  
+
   let categoriesList = [];
   let choosenCategories = document.querySelectorAll(
     "#categories-holder .category-badge"
-    );
-    for (const item of choosenCategories) {
-      categoriesList.push(item.innerText);
-    }
-    
-    let images = document.querySelectorAll("#innerAccordion img");
-    let imagesUrlsList = [];
-    for (const image of images) {
-      imagesUrlsList.push(image.src);
-    }
-    
-    let resources = document.querySelectorAll("#resources-div a");
-    let resourcesList = [];
-    for (const resource of resources) {
-      resourcesList.push(resource.innerText);
-    }
-    
+  );
+  for (const item of choosenCategories) {
+    categoriesList.push(item.innerText);
+  }
+
+  let images = document.querySelectorAll("#innerAccordion img");
+  let imagesUrlsList = [];
+  for (const image of images) {
+    imagesUrlsList.push(image.src);
+  }
+
+  let resources = document.querySelectorAll("#resources-div a");
+  let resourcesList = [];
+  for (const resource of resources) {
+    resourcesList.push(resource.innerText);
+  }
+
   let overviewField = document.getElementById("overview");
   let overviewText = overviewField.value;
   let articleText = easyMDE.value();
   let latitude = latitudeField.value;
   let longitude = longitudeField.value;
   let location = new GeoPoint((latitude = latitude), (longitude = longitude));
-  
-  let checkList = [longitude, latitude, overviewText, locationName, videoUrl];
-  
+
+  let checkList = [longitude, latitude, overviewText, locationName];
+
   if (checkList.some((item) => item === "")) {
     emptyErrDiv.style.display = "block";
   }
-  if (articleText.length < 300) {
+  if (articleText.length < 100) {
     shortErrDiv.style.display = "block";
   }
   if (imagesUrlsList.length < 3) {
@@ -265,7 +296,7 @@ submitButton.addEventListener("click", async function () {
   if (resourcesList.length === 0) {
     resourcesErrDiv.style.display = "block";
   }
-  
+
   let errorCheckList = [
     imagesErrDiv.style.display,
     shortErrDiv.style.display,
@@ -273,8 +304,8 @@ submitButton.addEventListener("click", async function () {
     emptyErrDiv.style.display,
     resourcesErrDiv.style.display,
   ];
-  
-  if (errorCheckList.every((style)=> style !== "block")) {
+
+  if (errorCheckList.every((style) => style !== "block")) {
     let articleData = {
       articleTextMD: articleText,
       categories: categoriesList,
@@ -294,9 +325,9 @@ submitButton.addEventListener("click", async function () {
       writingDate: serverTimestamp(),
       overview: overviewField.value,
     };
-    
+
     await addDoc(collection(db, "articles_data"), articleData);
-    document.getElementsByTagName('form')[0].reset();
+    document.getElementsByTagName("form")[0].reset();
     window.location.reload();
   }
 });

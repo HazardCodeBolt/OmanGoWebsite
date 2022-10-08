@@ -97,6 +97,12 @@ nav a {
   border-color: #0ce466; 
 }
 
+#setPosition:hover {
+  background-color: #e7fff1;
+  color: #0ce466;
+  border-color: #0ce466; 
+}
+
 #addCategory:hover {
   background-color: #e7fff1;
   color: #0ce466;

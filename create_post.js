@@ -1,3 +1,35 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+import {
+  doc,
+  setDoc,
+  addDoc,
+  getFirestore,
+  collection,
+  getDocs,
+  GeoPoint,
+  serverTimestamp,
+  Timestamp,
+} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
+  authDomain: "tourguideom-2861a.firebaseapp.com",
+  projectId: "tourguideom-2861a",
+  storageBucket: "tourguideom-2861a.appspot.com",
+  messagingSenderId: "513935140062",
+  appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
+  measurementId: "G-EVKY5F25VR",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const rtdb = getDatabase();
 // --------------------------------------------------------------------------------
 // start of creating the map area
 const easyMDE = new EasyMDE({
@@ -83,39 +115,44 @@ var categories = [
   "Museum",
   "Amusement center",
 ];
+var categoriesObjRef = ref(rtdb, 'categories/');
 
 var categoryDropDown = document.getElementById("inputGroupSelect03");
 var categoriesHolder = document.getElementById("categories-holder");
 var addCategoryButton = document.getElementById("addCategory");
+onValue(categoriesObjRef, (snapshot)=>{
+  const catData = snapshot.val();
+  var categories = Object.values(catData);
 
-for (let index = 0; index < categories.length; index++) {
-  const category = categories[index];
-  let option = document.createElement("option");
-  option.value = index;
-  option.innerText = category;
-  categoryDropDown.appendChild(option);
-}
-
-addCategoryButton.addEventListener("click", function () {
-  let selectedValue =
-    categoryDropDown.options[categoryDropDown.selectedIndex].text;
-
-  if (
-    selectedValue !== "Choose..." &&
-    !categoriesHolder.innerText.includes(selectedValue)
-  ) {
-    let categorySpan = document.createElement("span");
-    categorySpan.classList.add(
-      "badge",
-      "border",
-      "p-2",
-      "me-1",
-      "category-badge"
-    );
-    categorySpan.innerText = selectedValue;
-    categorySpan.onclick = () => removeBadge(categorySpan);
-    categoriesHolder.appendChild(categorySpan);
+  for (let index = 0; index < categories.length; index++) {
+    const category = categories[index];
+    let option = document.createElement("option");
+    option.value = index;
+    option.innerText = category;
+    categoryDropDown.appendChild(option);
   }
+  
+  addCategoryButton.addEventListener("click", function () {
+    let selectedValue =
+      categoryDropDown.options[categoryDropDown.selectedIndex].text;
+  
+    if (
+      selectedValue !== "Choose..." &&
+      !categoriesHolder.innerText.includes(selectedValue)
+    ) {
+      let categorySpan = document.createElement("span");
+      categorySpan.classList.add(
+        "badge",
+        "border",
+        "p-2",
+        "me-1",
+        "category-badge"
+      );
+      categorySpan.innerText = selectedValue;
+      categorySpan.onclick = () => removeBadge(categorySpan);
+      categoriesHolder.appendChild(categorySpan);
+    }
+  });
 });
 
 function removeBadge(element) {
@@ -204,31 +241,6 @@ function isURL(str) {
 // end of adding resources
 // --------------------------------------------------------------------------------
 // strat of sending data to firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
-import {
-  doc,
-  setDoc,
-  addDoc,
-  getFirestore,
-  collection,
-  getDocs,
-  GeoPoint,
-  serverTimestamp,
-  Timestamp,
-} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
-  authDomain: "tourguideom-2861a.firebaseapp.com",
-  projectId: "tourguideom-2861a",
-  storageBucket: "tourguideom-2861a.appspot.com",
-  messagingSenderId: "513935140062",
-  appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
-  measurementId: "G-EVKY5F25VR",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 var submitButton = document.getElementById("submitButton");
 

@@ -1,3 +1,38 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+import {
+  doc,
+  setDoc,
+  addDoc,
+  getDoc,
+  getFirestore,
+  collection,
+  getDocs,
+  GeoPoint,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
+  authDomain: "tourguideom-2861a.firebaseapp.com",
+  projectId: "tourguideom-2861a",
+  storageBucket: "tourguideom-2861a.appspot.com",
+  messagingSenderId: "513935140062",
+  appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
+  measurementId: "G-EVKY5F25VR",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const rtdb = getDatabase();
+
 // start of getting requested document to edit
 const url = new URL(window.location.href);
 const urlParams = new URLSearchParams(url.search);
@@ -11,73 +46,45 @@ const easyMDE = new EasyMDE({
 // end of creating the map area
 // --------------------------------------------------------------------------------
 // start of adding categories to dropdown and to categories holder
-var categories = [
-  "Heritage Site",
-  "Restaurant",
-  "Shop",
-  "Beach",
-  "Park",
-  "City",
-  "Nature reserve",
-  "Garden",
-  "Wadi",
-  "Cave",
-  "Castle",
-  "Fort",
-  "Sands",
-  "Fjord",
-  "Plaza",
-  "Suburb",
-  "Town",
-  "Village",
-  "Island",
-  "Sinkhole",
-  "Mountain",
-  "Harbour",
-  "Mosque",
-  "Falaj",
-  "Mall",
-  "Traditional Market",
-  "Canyon",
-  "Hotel",
-  "Opera House",
-  "Palace",
-  "Museum",
-  "Amusement center",
-];
+const categoriesObjRef = ref(rtdb, "categories/");
 
 var categoryDropDown = document.getElementById("inputGroupSelect03");
 var categoriesHolder = document.getElementById("categories-holder");
 var addCategoryButton = document.getElementById("addCategory");
 
-for (let index = 0; index < categories.length; index++) {
-  const category = categories[index];
-  let option = document.createElement("option");
-  option.value = index;
-  option.innerText = category;
-  categoryDropDown.appendChild(option);
-}
+onValue(categoriesObjRef, (snapshot) => {
+  const catData = snapshot.val();
+  var categories = Object.values(catData);
 
-addCategoryButton.addEventListener("click", function () {
-  let selectedValue =
-    categoryDropDown.options[categoryDropDown.selectedIndex].text;
-
-  if (
-    selectedValue !== "Choose..." &&
-    !categoriesHolder.innerText.includes(selectedValue)
-  ) {
-    let categorySpan = document.createElement("span");
-    categorySpan.classList.add(
-      "badge",
-      "border",
-      "p-2",
-      "me-1",
-      "category-badge"
-    );
-    categorySpan.innerText = selectedValue;
-    categorySpan.onclick = () => removeBadge(categorySpan);
-    categoriesHolder.appendChild(categorySpan);
+  for (let index = 0; index < categories.length; index++) {
+    const category = categories[index];
+    let option = document.createElement("option");
+    option.value = index;
+    option.innerText = category;
+    categoryDropDown.appendChild(option);
   }
+
+  addCategoryButton.addEventListener("click", function () {
+    let selectedValue =
+      categoryDropDown.options[categoryDropDown.selectedIndex].text;
+
+    if (
+      selectedValue !== "Choose..." &&
+      !categoriesHolder.innerText.includes(selectedValue)
+    ) {
+      let categorySpan = document.createElement("span");
+      categorySpan.classList.add(
+        "badge",
+        "border",
+        "p-2",
+        "me-1",
+        "category-badge"
+      );
+      categorySpan.innerText = selectedValue;
+      categorySpan.onclick = () => removeBadge(categorySpan);
+      categoriesHolder.appendChild(categorySpan);
+    }
+  });
 });
 
 function removeBadge(element) {
@@ -162,33 +169,6 @@ function isURL(str) {
 // end of adding resources
 // --------------------------------------------------------------------------------
 // strat of sending data to firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
-import {
-  doc,
-  setDoc,
-  addDoc,
-  getDoc,
-  getFirestore,
-  collection,
-  getDocs,
-  GeoPoint,
-  serverTimestamp,
-  Timestamp,
-  updateDoc,
-} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD-bIBJ4LEFt0v8ZT1fW_Sm2JkMYMSiy5E",
-  authDomain: "tourguideom-2861a.firebaseapp.com",
-  projectId: "tourguideom-2861a",
-  storageBucket: "tourguideom-2861a.appspot.com",
-  messagingSenderId: "513935140062",
-  appId: "1:513935140062:web:863d7d375c6fdddf194e4f",
-  measurementId: "G-EVKY5F25VR",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 var submitButton = document.getElementById("submitButton");
 
@@ -394,7 +374,7 @@ function isGeoLocation({ latitude, longitude }) {
     parseFloat(latitude) <= 90.0 &&
     parseFloat(longitude) >= -180.0 &&
     parseFloat(longitude) <= 180.0
-  ) { 
+  ) {
     return true;
   } else {
     return false;
@@ -402,7 +382,12 @@ function isGeoLocation({ latitude, longitude }) {
 }
 
 setBtn.onclick = function () {
-  if (isGeoLocation({latitude : latitudeField.value, longitude : longitudeField.value})){
+  if (
+    isGeoLocation({
+      latitude: latitudeField.value,
+      longitude: longitudeField.value,
+    })
+  ) {
     lp = new locationPicker(
       "map",
       {
